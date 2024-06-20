@@ -152,4 +152,4 @@ ip route add 172.0.0.0/24 dev br1
 
 
 ## 2. **Routing between Namespaces on Different Servers:**
-- If namespaces are on different servers but can see each other on Layer 2, Same as last part we should add proper routing rules to the servers. on each side, routing to outside should be set to system physical ethernet and nearby namespaces should be routed to the bridge.
+If namespaces are on different servers but can see each other on Layer 2, Same as last part we should add proper routing rules to the servers. on each side, routing to outside should be set to system physical ethernet and nearby namespaces should be routed to the bridge.
