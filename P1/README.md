@@ -24,6 +24,7 @@ ip link set br1 up
 ip link set br2 up
 
 # Create veth pairs and assign them to namespaces
+echo "Creating veth pairs"
 ip link add veth-node1 type veth peer name veth-br11
 ip link add veth-node2 type veth peer name veth-br12
 ip link add veth-node3 type veth peer name veth-br23
@@ -129,8 +130,26 @@ DEST=$2
 # Get IP address of the destination node
 DEST_IP=$(ip netns exec $DEST ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 
+
 # Ping the destination from the source
 ip netns exec $SOURCE ping -c 4 $DEST_IP
 ```
 
+## 1. **Routing without a Router:**
+- Lets remove the router!
+```bash
+ip netns del router
+```
+- Without the router, static routes must be configured on the bridges in the root namespace.
+- On `br1` namespace:
+```bash
+ip route add 10.10.0.0/24 dev br2
+```
+- On `br2` namespace:
+```bash
+ip route add 172.0.0.0/24 dev br1
+```
 
+
+## 2. **Routing between Namespaces on Different Servers:**
+- If namespaces are on different servers but can see each other on Layer 2, Same as last part we should add proper routing rules to the servers. on each side, routing to outside should be set to system physical ethernet and nearby namespaces should be routed to the bridge.
